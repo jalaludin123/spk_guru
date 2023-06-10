@@ -82,8 +82,8 @@ class Login extends BaseController
             $data = [
                 'nama' => $this->request->getPost('nama'),
                 'username' => $this->request->getPost('username'),
-                'password' => $this->request->getPost('password'),
-                'level' => 'admin'
+                'password' => password_hash($this->request->getPost('password'), PASSWORD_DEFAULT),
+                'level' => $this->request->getPost('level';)
             ];
 
             $this->admin->insert($data);
@@ -119,9 +119,8 @@ class Login extends BaseController
         $password = $this->request->getPost('password');
 
         $admin = $this->admin->where(['username' => $username])->first();
-      
         if ($admin) {
-            if ($password == $admin['password']) {
+            if (password_verify($password, $admin['password'])) {
                 $data = [
                     'isLogin'   => true,
                     'id_user'   => $admin['id_user'],
